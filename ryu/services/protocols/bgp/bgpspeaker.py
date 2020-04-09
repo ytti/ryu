@@ -629,7 +629,7 @@ class BGPSpeaker(object):
 
         return call('operator.show', **show)
 
-    def prefix_add(self, prefix, next_hop=None, route_dist=None):
+    def prefix_add(self, prefix, next_hop=None, route_dist=None, **kwargs):
         """ This method adds a new prefix to be advertised.
 
         ``prefix`` must be the string representation of an IP network
@@ -662,6 +662,7 @@ class BGPSpeaker(object):
                 networks[NEXT_HOP] = \
                     str(netaddr.IPAddress(next_hop).ipv6())
 
+        networks.update(kwargs)
         return call(func_name, **networks)
 
     def prefix_del(self, prefix, route_dist=None):

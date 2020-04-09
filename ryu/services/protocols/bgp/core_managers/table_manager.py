@@ -772,7 +772,7 @@ class TableCoreManager(object):
             nlri=prefix, communities=communities,
             is_withdraw=is_withdraw)
 
-    def update_global_table(self, prefix, next_hop=None, is_withdraw=False):
+    def update_global_table(self, prefix, next_hop=None, is_withdraw=False, **kwargs):
         """Update a BGP route in the Global table for the given `prefix`
         with the given `next_hop`.
 
@@ -782,13 +782,15 @@ class TableCoreManager(object):
         """
         src_ver_num = 1
         peer = None
-        # set mandatory path attributes
-        origin = BGPPathAttributeOrigin(BGP_ATTR_ORIGIN_IGP)
-        aspath = BGPPathAttributeAsPath([[]])
 
-        pathattrs = OrderedDict()
-        pathattrs[BGP_ATTR_TYPE_ORIGIN] = origin
-        pathattrs[BGP_ATTR_TYPE_AS_PATH] = aspath
+        pathattrs = kwargs.get("pathattrs", None)
+        if not pathattrs:
+            # set mandatory path attributes
+            origin = BGPPathAttributeOrigin(BGP_ATTR_ORIGIN_IGP)
+            aspath = BGPPathAttributeAsPath([[]])
+            pathattrs = OrderedDict()
+            pathattrs[BGP_ATTR_TYPE_ORIGIN] = origin
+            pathattrs[BGP_ATTR_TYPE_AS_PATH] = aspath
 
         net = netaddr.IPNetwork(prefix)
         addr = str(net.ip)

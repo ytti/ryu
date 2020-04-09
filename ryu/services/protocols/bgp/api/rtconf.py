@@ -273,9 +273,9 @@ def get_vrfs_conf():
 
 
 @register(name='network.add')
-def add_network(prefix, next_hop=None):
+def add_network(prefix, next_hop=None, **kwargs):
     tm = CORE_MANAGER.get_core_service().table_manager
-    tm.update_global_table(prefix, next_hop)
+    tm.update_global_table(prefix, next_hop, **kwargs)
     return True
 
 
